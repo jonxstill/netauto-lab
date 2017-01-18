@@ -5,11 +5,11 @@
     - name: mgmt
       ip:   10.0.5.10
     - name: S1L1
-      iface: Eth1
+      iface: Eth2
       peer: leaf-1
       ip: 10.254.0.1/30
     - name: S1L2
-      iface: Eth2
+      iface: Eth3
       peer: leaf-2
       ip: 10.254.0.5/30
 
@@ -19,11 +19,11 @@
     - name: mgmt
       ip:   10.0.5.11
     - name: S2L1
-      iface: Eth1
+      iface: Eth2
       peer: leaf-1
       ip: 10.254.0.9/30
     - name: S2L2
-      iface: Eth2
+      iface: Eth3
       peer: leaf-2
       ip: 10.254.0.13/30
 
@@ -33,11 +33,11 @@
     - name: mgmt
       ip:   10.0.5.12
     - name: S1L1
-      iface: Eth1
+      iface: Eth2
       peer: spine-1
       ip: 10.254.0.2/30
     - name: S2L1
-      iface: Eth2
+      iface: Eth3
       peer: spine-2
       ip: 10.254.0.10/30
 
@@ -47,11 +47,11 @@
     - name: mgmt
       ip:   10.0.5.13
     - name: S1L2
-      iface: Eth1
+      iface: Eth2
       peer: spine-1
       ip: 10.254.0.6/30
     - name: S2L2
-      iface: Eth2
+      iface: Eth3
       peer: spine-2
       ip: 10.254.0.14/30
 
@@ -60,5 +60,4 @@
   box: bento/ubuntu-16.04 
   links:
     - name: mgmt
-      ip:   10.0.5.2
-
+      ip:   10.0.5.254

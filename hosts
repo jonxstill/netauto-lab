@@ -1,5 +1,5 @@
 [all]
-spine-1    ansible_host=127.0.0.1        ansible_port=2222  ansible_user=vagrant ansible_ssh_pass=vagrant
-spine-2    ansible_host=127.0.0.1        ansible_port=2200  ansible_user=vagrant ansible_ssh_pass=vagrant
-leaf-1     ansible_host=127.0.0.1        ansible_port=2201  ansible_user=vagrant ansible_ssh_pass=vagrant
-leaf-2     ansible_host=127.0.0.1        ansible_port=2202  ansible_user=vagrant ansible_ssh_pass=vagrant
+spine-1    ansible_host=10.0.5.10        ansible_user=vagrant ansible_ssh_pass=vagrant
+spine-2    ansible_host=10.0.5.11        ansible_user=vagrant ansible_ssh_pass=vagrant
+leaf-1     ansible_host=10.0.5.12        ansible_user=vagrant ansible_ssh_pass=vagrant
+leaf-2     ansible_host=10.0.5.13        ansible_user=vagrant ansible_ssh_pass=vagrant

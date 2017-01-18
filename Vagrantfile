@@ -61,34 +61,48 @@ Vagrant.configure(VAGRANTFILE_API_VER) do |config|
       if host.key?("links")
         host["links"].each do |link|
           ipaddr = "169.254.1.11"
-          srv.vm.network "private_network", virtualbox__intnet: link["name"], ip: ipaddr, auto_config: false
+          srv.vm.network "private_network", virtualbox__intnet: link["name"], ip: (defined?(link["ip"]) ? link["ip"] : ipaddr), auto_config: (/vEOS/.match(host['box']) ? false : true)
+          if link.key?("name")
+            if link["name"] == "mgmt"
+              $mgmtip = link["ip"]
+            end
+          end
         end
       end
 
       if /vEOS/.match(host['box'])
         $script = <<-SCRIPT
-          FastCli -p 15 -c "configure
-          hostname $1"
-        SCRIPT
+FastCli -p 15 -c "configure
+hostname $1
+vrf definition MGMT
+rd 1:1
+interface Eth1
+no switchport
+no shutdown
+vrf forwarding MGMT
+ip address $2 255.255.255.0"
+SCRIPT
 
         srv.vm.provision "shell" do |s|
           s.inline = $script
-          s.args = host["name"]
+          s.args = [host["name"], $mgmtip]
         end
       end
       if /ubuntu/.match(host['box'])
         $script = <<-SCRIPT
-	  export DEBIAN_FRONTEND=noninteractive
-          sudo hostnamectl set-hostname $1
-	  cp /etc/hosts /tmp/hosts
-	  sudo cat /tmp/hosts|sed 's/vagrant/nms/g' > /etc/hosts
-          sudo apt-get install software-properties-common -y
-	  sudo apt-add-repository ppa:ansible/ansible -y
-	  sudo apt-get update
-	  sudo apt-get install ansible -y
-	  sudo apt-get install python-pip -y
-	  sudo pip install ntc-ansible
-        SCRIPT
+export DEBIAN_FRONTEND=noninteractive
+sudo hostnamectl set-hostname $1
+cp /etc/hosts /tmp/hosts
+sudo cat /tmp/hosts|sed 's/vagrant/nms/g' > /etc/hosts
+sudo apt-get install software-properties-common -y
+sudo apt-add-repository ppa:ansible/ansible -y
+sudo apt-get update
+sudo apt-get install ansible -y
+sudo apt-get install python-pip -y
+sudo pip install ntc-ansible
+mkdir -p /home/vagrant/.ssh
+cp /vagrant/ssh-config /home/vagrant/.ssh/config
+SCRIPT
 
         srv.vm.provision "shell" do |s|
           s.inline = $script
