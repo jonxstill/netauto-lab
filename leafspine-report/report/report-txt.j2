@@ -1,0 +1,6 @@
+#jinja2: lstrip_blocks: True
+{{ devparams.hostname }} (AS {{ devparams.localas }})
+
+{% for iface, ifparams in devparams.peerints|dictsort %}
+{{ iface }} {{ ifparams.enabled }} {{ifparams.ip}} {{ifparams.peer}} {{ifparams.remoteas}}
+{% endfor %}

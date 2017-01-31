@@ -1,0 +1,6 @@
+#jinja2: lstrip_blocks: True
+{% include "header.html" %}
+{% for device in hostvars['leaf-1'].groups.all %}
+{% include "output/report-" + device + ".html" %}
+{% endfor %}
+{% include "footer.html" %}

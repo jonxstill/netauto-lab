@@ -1,0 +1,13 @@
+[all]
+spine-1    ansible_host=10.0.5.10
+spine-2    ansible_host=10.0.5.11
+leaf-1     ansible_host=10.0.5.12
+leaf-2     ansible_host=10.0.5.13
+
+[spines]
+spine-1
+spine-2
+
+[leaves]
+leaf-1
+leaf-2

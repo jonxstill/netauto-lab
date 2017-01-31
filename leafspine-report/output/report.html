@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Leaf/Spine Topology Report</title>
+
+    <!-- Bootstrap -->
+    <link href="../report/bootstrap.min.css" rel="stylesheet">
+    <link href="../report/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="../report/theme.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+          </button>
+          <a class="navbar-brand" href="/">Leaf/Spine Topology Report</a>
+        </div>
+      </div>
+    </nav>
+    <div class="container theme-showcase" role="main">
+    <div class="page-header">
+    <h3>leaf-1 (AS 64521)</h3>
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Interface</th>
+                <th>Admin State</th>
+		<th>Interface State</th>
+		<th>Line Protocol State</th>
+                <th>IP Address</th>
+                <th>Peer IP </th>
+                <th>Peer AS</th>
+                <th>Peer State</th>
+                <th>Prefixes Rx</th>
+		<th>Peer Device</th>
+		<th>Peer Interface</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Ethernet2</td>
+                <td>True</td>
+                <td>connected</td>
+                <td>up</td>
+                <td>10.254.0.2/30</td>
+                <td>10.254.0.1</td>
+                <td>64512</td>
+                <td>Established</td>
+                <td>2</td>
+                <td>spine-1</td>
+                <td>Ethernet2</td>
+            </tr>
+            <tr>
+                <td>Ethernet3</td>
+                <td>True</td>
+                <td>connected</td>
+                <td>up</td>
+                <td>10.254.0.10/30</td>
+                <td>10.254.0.9</td>
+                <td>64512</td>
+                <td>Established</td>
+                <td>2</td>
+                <td>spine-2</td>
+                <td>Ethernet2</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="page-header">
+    <h3>leaf-2 (AS 64522)</h3>
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Interface</th>
+                <th>Admin State</th>
+		<th>Interface State</th>
+		<th>Line Protocol State</th>
+                <th>IP Address</th>
+                <th>Peer IP </th>
+                <th>Peer AS</th>
+                <th>Peer State</th>
+                <th>Prefixes Rx</th>
+		<th>Peer Device</th>
+		<th>Peer Interface</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Ethernet2</td>
+                <td>True</td>
+                <td>connected</td>
+                <td>up</td>
+                <td>10.254.0.6/30</td>
+                <td>10.254.0.5</td>
+                <td>64512</td>
+                <td>Established</td>
+                <td>2</td>
+                <td>spine-1</td>
+                <td>Ethernet3</td>
+            </tr>
+            <tr>
+                <td>Ethernet3</td>
+                <td>True</td>
+                <td>connected</td>
+                <td>up</td>
+                <td>10.254.0.14/30</td>
+                <td>10.254.0.13</td>
+                <td>64512</td>
+                <td>Established</td>
+                <td>2</td>
+                <td>spine-2</td>
+                <td>Ethernet3</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="page-header">
+    <h3>spine-1 (AS 64512)</h3>
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Interface</th>
+                <th>Admin State</th>
+		<th>Interface State</th>
+		<th>Line Protocol State</th>
+                <th>IP Address</th>
+                <th>Peer IP </th>
+                <th>Peer AS</th>
+                <th>Peer State</th>
+                <th>Prefixes Rx</th>
+		<th>Peer Device</th>
+		<th>Peer Interface</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Ethernet2</td>
+                <td>True</td>
+                <td>connected</td>
+                <td>up</td>
+                <td>10.254.0.1/30</td>
+                <td>10.254.0.2</td>
+                <td>64521</td>
+                <td>Established</td>
+                <td>1</td>
+                <td>leaf-1</td>
+                <td>Ethernet2</td>
+            </tr>
+            <tr>
+                <td>Ethernet3</td>
+                <td>True</td>
+                <td>connected</td>
+                <td>up</td>
+                <td>10.254.0.5/30</td>
+                <td>10.254.0.6</td>
+                <td>64522</td>
+                <td>Established</td>
+                <td>1</td>
+                <td>leaf-2</td>
+                <td>Ethernet2</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="page-header">
+    <h3>spine-2 (AS 64512)</h3>
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Interface</th>
+                <th>Admin State</th>
+		<th>Interface State</th>
+		<th>Line Protocol State</th>
+                <th>IP Address</th>
+                <th>Peer IP </th>
+                <th>Peer AS</th>
+                <th>Peer State</th>
+                <th>Prefixes Rx</th>
+		<th>Peer Device</th>
+		<th>Peer Interface</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Ethernet2</td>
+                <td>True</td>
+                <td>connected</td>
+                <td>up</td>
+                <td>10.254.0.9/30</td>
+                <td>10.254.0.10</td>
+                <td>64521</td>
+                <td>Established</td>
+                <td>1</td>
+                <td>leaf-1</td>
+                <td>Ethernet3</td>
+            </tr>
+            <tr>
+                <td>Ethernet3</td>
+                <td>True</td>
+                <td>connected</td>
+                <td>up</td>
+                <td>10.254.0.13/30</td>
+                <td>10.254.0.14</td>
+                <td>64522</td>
+                <td>Established</td>
+                <td>1</td>
+                <td>leaf-2</td>
+                <td>Ethernet3</td>
+            </tr>
+        </tbody>
+    </table>     </div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="../report/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="../report/bootstrap.min.js"></script>
+  </body>
+</html>

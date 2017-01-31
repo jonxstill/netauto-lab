@@ -1,0 +1,25 @@
+hostname: spine-1
+localas: 64512
+peerints:
+  Ethernet2:
+    intstatus: connected
+    lpstatus: up
+    enabled: True
+    ip: 10.254.0.1/30
+    peer: 10.254.0.2
+    remoteas: 64521
+    prefixrx: 1
+    peerstate: Established
+    peerhost: leaf-1
+    peerport: Ethernet2
+  Ethernet3:
+    intstatus: connected
+    lpstatus: up
+    enabled: True
+    ip: 10.254.0.5/30
+    peer: 10.254.0.6
+    remoteas: 64522
+    prefixrx: 1
+    peerstate: Established
+    peerhost: leaf-2
+    peerport: Ethernet2
