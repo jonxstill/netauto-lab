@@ -13,29 +13,20 @@
         path: "{{ output }}"
         state: directory
 
-    - name: Get BGP Peers
-      register: bgpsumout
+    - name: Gather Data
+      register: routerdata
       eos_command:
         provider: "{{ cli }}"
-        commands: show ip bgp summary | json
+        commands:
+         - show ip bgp summary | json
+         - show ip int | json
+         - show lldp neighbors | json
 
-    - name: Get Interface IPs
-      register: intipsout
-      eos_command:
-        provider: "{{ cli }}"
-        commands: show ip int | json
-
-    - name: Get LLDP Neighbours
-      register: lldpneiout
-      eos_command:
-        provider: "{{ cli }}"
-        commands: show lldp neighbors | json
-        
     - name: Fact Setting
       set_fact:
-        bgppeers: "{{ bgpsumout.stdout[0].vrfs.default }}"
-        intips: "{{ intipsout.stdout[0].interfaces }}"
-        lldpnei: "{{ lldpneiout.stdout[0].lldpNeighbors }}"
+        bgppeers: "{{ routerdata.stdout[0].vrfs.default }}"
+        intips: "{{ routerdata.stdout[1].interfaces }}"
+        lldpnei: "{{ routerdata.stdout[2].lldpNeighbors }}"
 
     - name: Generate Device YAML File
       template:
