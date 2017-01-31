@@ -8,12 +8,17 @@
 
   tasks:
     - name: Create Output Directory
+      tags:
+        - dataonly
+        - reportonly
       run_once: true
       file:
         path: "{{ output }}"
         state: directory
 
     - name: Gather Data
+      tags:
+        - dataonly
       register: routerdata
       eos_command:
         provider: "{{ cli }}"
@@ -23,12 +28,16 @@
          - show lldp neighbors | json
 
     - name: Fact Setting
+      tags:
+        - dataonly
       set_fact:
         bgppeers: "{{ routerdata.stdout[0].vrfs.default }}"
         intips: "{{ routerdata.stdout[1].interfaces }}"
         lldpnei: "{{ routerdata.stdout[2].lldpNeighbors }}"
 
     - name: Generate Device YAML File
+      tags:
+        - dataonly
       template:
         src: "data-yml.j2"
         dest: "{{output}}/{{inventory_hostname}}.yml"
