@@ -3,7 +3,7 @@ hostname: {{ inventory_hostname }}
 localas: {{ bgppeers.asn }}
 peerints:
 {% for iface,ifprops in intips|dictsort %}
-  {% set fullnet = ifprops.interfaceAddress.primaryIp.address + "/" + ifprops.interfaceAddress.primaryIp.maskLen|string %}
+  {% set fullnet = ifprops.interfaceAddress.primaryIp.address ~ "/" ~ ifprops.interfaceAddress.primaryIp.maskLen %}
   {% for peer, peerprops in bgppeers.peers|dictsort %}
     {% if iface is not equalto "Loopback0" %}
       {% if peer|ipaddr(fullnet) %}
