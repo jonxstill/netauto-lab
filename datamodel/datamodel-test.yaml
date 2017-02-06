@@ -1,0 +1,29 @@
+---
+- name: Produce Datamodel output
+  hosts: all
+  connection: local
+  gather_facts: false
+  vars:
+   - output: "{{inventory_dir}}/output"
+
+  tasks:
+    - name: Create Output Directory
+      tags:
+        - dataonly
+        - reportonly
+      run_once: true
+      file:
+        path: "{{ output }}"
+        state: directory
+
+    - name: Read Data Model
+      include_vars:
+        file: "datamodel.yaml"
+        name: dmparams
+
+    - name: Generate Device YAML File
+      tags:
+        - dataonly
+      template:
+        src: "datamodel.j2"
+        dest: "{{output}}/{{inventory_hostname}}.yml"

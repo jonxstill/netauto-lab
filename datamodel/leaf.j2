@@ -1,0 +1,10 @@
+{% set routerid = inventory_hostname.split("-")[1]|int %}
+{% set loopbackaddr = dmparams.loopbackprefix|ipsubnet(32, routerid) %}
+{% set asn = dmparams.baseasn + routerid %}
+{{ loopbackaddr }}
+{{ asn }}
+
+{% for intcount in range(0, dmparams.spines) %}
+Interface {{ dmparams.firstuplink + intcount }}
+  {{ dmparams.p2pprefix|ipsubnet(dmparams.p2plength, ((routerid-1) + intcount)) }}
+{% endfor %}
