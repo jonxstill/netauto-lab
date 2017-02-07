@@ -1,11 +1,13 @@
-10.254.254.2/32
-64522
+---
+loopbackaddr: 10.254.254.2/32
+asn: 64522
 
-Interface 2
-  10.254.0.2/31
-Interface 3
-  10.254.0.4/31
-Interface 4
-  10.254.0.6/31
-Interface 5
-  10.254.0.8/31
+interfaces:
+  Eth2:
+    ip: 10.254.0.17/30
+    peerasn: 64520
+    peerip: 10.254.0.18/30
+  Eth3:
+    ip: 10.254.0.21/30
+    peerasn: 64520
+    peerip: 10.254.0.22/30

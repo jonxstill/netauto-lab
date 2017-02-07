@@ -1,4 +1,6 @@
 #jinja2: lstrip_blocks: True
+---
+{% set p2psize = dmparams.p2pprefix|ipsubnet(dmparams.p2plength, 0)|ipaddr('net')|ipaddr('size') %}
 {% if inventory_hostname.startswith(dmparams.spineprefix) %}
 {% include  "spine.j2" %}
 {% else %}

@@ -21,9 +21,23 @@
         file: "datamodel.yaml"
         name: dmparams
 
-    - name: Generate Device YAML File
-      tags:
-        - dataonly
-      template:
-        src: "datamodel.j2"
-        dest: "{{output}}/{{inventory_hostname}}.yml"
+    - name: Set Validation Facts
+      set_fact:
+        loopbackprefix_invalid: "{{ dmparams.loopbackprefix|ipsubnet == dmparams.loopbackprefix }}"
+        p2pprefix_invalid: "{{ dmparams.p2pprefix|ipsubnet == dmparams.p2pprefix }}"
+        p2pprefix_insufficient: "{{ (dmparams.p2pprefix|ipaddr('size') / dmparams.p2pprefix|ipsubnet(dmparams.p2plength, 0)|ipaddr('size')) < (dmparams.maxspines * dmparams.leaves) }}"
+
+    - name: Data Model Validation
+      run_once: true
+      assert:
+        that:
+          - "p2pprefix_invalid != false"
+          - "p2pprefix_insufficient == false"
+        msg: "Validation Failed"
+
+    # - name: Generate Device YAML File
+    #   tags:
+    #     - dataonly
+    #   template:
+    #     src: "datamodel.j2"
+    #     dest: "{{output}}/{{inventory_hostname}}.yml"
