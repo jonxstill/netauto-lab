@@ -31,13 +31,27 @@
       run_once: true
       assert:
         that:
+          - "dmparams.maxspines|int(-1) != -1"
+          - "dmparams.leaves|int(-1) != -1"
+          - "dmparams.spines|int(-1) != -1"
+          - "dmparams.maxspines > 0"
+          - "dmparams.spines > 0"
+          - "dmparams.spines <= dmparams.maxspines"
+          - "dmparams.leaves > 0"
+          - "dmparams.baseasn is defined"
+          - "dmparams.p2plength <= 31"
+          - "dmparams.leafprefix is defined"
+          - "dmparams.spineprefix is defined"
+          - "dmparams.firstuplink|int(-1) != -1"
+          - "dmparams.firstuplink > 0"
+          - "loopbackprefix_invalid != false"
           - "p2pprefix_invalid != false"
           - "p2pprefix_insufficient == false"
         msg: "Validation Failed"
 
-    # - name: Generate Device YAML File
-    #   tags:
-    #     - dataonly
-    #   template:
-    #     src: "datamodel.j2"
-    #     dest: "{{output}}/{{inventory_hostname}}.yml"
+    - name: Generate Device YAML File
+      tags:
+        - dataonly
+      template:
+        src: "datamodel.j2"
+        dest: "{{output}}/{{inventory_hostname}}.yml"

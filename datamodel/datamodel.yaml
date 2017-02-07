@@ -1,6 +1,7 @@
 ---
 maxspines: 4
-leaves: 4
+spines: 2
+leaves: 2
 baseasn: 64520
 p2plength: 31
 loopbackprefix: 10.254.254.0/24
