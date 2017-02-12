@@ -1,0 +1,39 @@
+#jinja2: lstrip_blocks: True
+interface vxlan{{ dmparams.loopbackint }}
+  vxlan source-interface Lo{{ dmparams.loopbackint }}
+
+{% for tenant, tenantparams in srvparams.tenants.iteritems() %}
+vrf definition {{ tenant }}
+  rd {{ infraparams.asn }}:{{ tenantparams.rd }}
+
+ip routing vrf {{ tenant }}
+
+{% for vlan,vlanparams in tenantparams.vlans.iteritems() %}
+vlan {{ vlanparams.vlanid }}
+  name {{ tenant }}-{{ vlan }}
+
+interface vxlan{{ dmparams.loopbackint }}
+  vxlan vlan {{ vlanparams.vlanid }} vni 10{{ vlanparams.vlanid }}
+  vxlan vlan {{ vlanparams.vlanid }} flood vtep {% for x in hostvars[inventory_hostname].groups.leaves|reject("equalto", inventory_hostname) -%}
+{{ hostvars[x].infraparams.loopbackaddr }}{% if not loop.last %}, {% endif %}
+{% endfor %}
+
+
+interface vlan{{ vlanparams.vlanid }}
+  vrf forwarding {{ tenant }}
+  ip address virtual {{ vlanparams.ip }}
+  no shut
+
+{% endfor %}{# vlan #}
+{% for port, vlan in tenantparams.ports[inventory_hostname].iteritems() %}
+interface {{ port }}
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan add {{ tenantparams.vlans[vlan].vlanid }}
+  spanning-tree portfast edge
+  spanning-tree bpduguard enable
+  spanning-tree guard root
+  switchport nonegotiate
+
+{% endfor %}{# port #}
+{% endfor %}{# tenant #}

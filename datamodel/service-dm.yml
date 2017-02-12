@@ -1,0 +1,29 @@
+tenants:
+ CustA:
+  rd: 1
+  vlans:
+    LAN:
+      vlanid: 100
+      ip: 192.168.1.254/24
+    DMZ:
+      vlanid: 101
+      ip: 172.16.1.254/24
+  ports:
+    leaf-1:
+      Eth4: LAN
+      Eth5: DMZ
+    leaf-2:
+      Eth4: LAN
+      Eth5: DMZ
+
+ CustB:
+  rd: 2
+  vlans:
+    LAN:
+      vlanid: 200
+      ip: 172.16.1.254/24
+  ports:
+    leaf-1:
+      Eth6: LAN
+    leaf-2:
+      Eth7: LAN

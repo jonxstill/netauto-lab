@@ -1,0 +1,17 @@
+#jinja2: lstrip_blocks: True
+interface Loopback{{ dmparams.loopbackint }}
+  ip address {{ infraparams.loopbackaddr }}
+
+ip prefix-list PL-ADV-OUT permit {{ infraparams.loopbackaddr }}
+
+route-map RM-ADV-OUT permit 10
+  match ip address prefix-list PL-ADV-OUT
+
+router bgp {{ infraparams.asn }}
+  network {{ infraparams.loopbackaddr }}
+  maximum-paths {{ dmparams.maxspines }}
+{% for peerint, peerparams in infraparams.interfaces.iteritems() %}
+  neighbor {{ peerparams.peerip }} remote-as {{ peerparams.peerasn }}
+  neighbor {{ peerparams.peerip }} update-source {{ peerint }}
+  neighbor {{ peerparams.peerip }} route-map RM-ADV-OUT out
+{% endfor %}

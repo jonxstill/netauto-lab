@@ -8,9 +8,6 @@
 
   tasks:
     - name: Create Output Directory
-      tags:
-        - dataonly
-        - reportonly
       run_once: true
       file:
         path: "{{ output }}"
@@ -18,7 +15,7 @@
 
     - name: Read Data Model
       include_vars:
-        file: "datamodel.yaml"
+        file: "infra-dm.yml"
         name: dmparams
 
     - name: Set Validation Facts
@@ -44,14 +41,25 @@
           - "dmparams.spineprefix is defined"
           - "dmparams.firstuplink|int(-1) != -1"
           - "dmparams.firstuplink > 0"
+          - "dmparams.loopbackint|int(-1) != -1"
+          - "dmparams.loopbackint >= 0"
           - "loopbackprefix_invalid != false"
           - "p2pprefix_invalid != false"
           - "p2pprefix_insufficient == false"
         msg: "Validation Failed"
 
     - name: Generate Device YAML File
-      tags:
-        - dataonly
       template:
-        src: "datamodel.j2"
-        dest: "{{output}}/{{inventory_hostname}}.yml"
+        src: "infra-dm.j2"
+        dest: "{{output}}/infra-{{inventory_hostname}}.yml"
+
+    - name: Read Infra Data Model
+      include_vars:
+        file: "{{output}}/infra-{{inventory_hostname}}.yml"
+        name: infraparams
+
+    - name: Generate Router Config
+      template:
+        src: "infra-config.j2"
+        dest: "{{output}}/infra-{{inventory_hostname}}-config.txt"
+

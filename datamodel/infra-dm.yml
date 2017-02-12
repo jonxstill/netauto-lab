@@ -5,6 +5,7 @@ leaves: 2
 baseasn: 64520
 p2plength: 31
 loopbackprefix: 10.254.254.0/24
+loopbackint: 0
 p2pprefix: 10.254.0.0/27
 firstuplink: 2
 leafprefix: leaf

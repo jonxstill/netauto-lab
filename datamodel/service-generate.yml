@@ -1,0 +1,34 @@
+---
+- name: Produce Service Datamodel output
+  hosts: leaves
+  connection: local
+  gather_facts: false
+  vars:
+   - output: "{{inventory_dir}}/output"
+
+  tasks:
+    - name: Create Output Directory
+      run_once: true
+      file:
+        path: "{{ output }}"
+        state: directory
+    
+    - name: Read Infra Data Model
+      include_vars:
+        file: "infra-dm.yml"
+        name: dmparams
+
+    - name: Read Generated Infra Data Model
+      include_vars:
+        file: "{{ output }}/infra-{{ inventory_hostname }}.yml"
+        name: infraparams
+
+    - name: Read Service Data Model
+      include_vars:
+        file: "service-dm.yml"
+        name: srvparams
+
+    - name: Generate Service Config
+      template:
+        src: "service-dm.j2"
+        dest: "{{output}}/service-{{inventory_hostname}}.txt"
