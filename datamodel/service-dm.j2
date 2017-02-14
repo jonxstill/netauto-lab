@@ -12,12 +12,11 @@ ip routing vrf {{ tenant }}
 vlan {{ vlanparams.vlanid }}
   name {{ tenant }}-{{ vlan }}
 
+{%- set leafinfra  = groups['leaves']|reject("equalto", inventory_hostname)|map('extract', hostvars, 'infraparams') -%}
+
 interface vxlan{{ dmparams.loopbackint }}
   vxlan vlan {{ vlanparams.vlanid }} vni 10{{ vlanparams.vlanid }}
-  vxlan vlan {{ vlanparams.vlanid }} flood vtep {% for x in hostvars[inventory_hostname].groups.leaves|reject("equalto", inventory_hostname) -%}
-{{ hostvars[x].infraparams.loopbackaddr }}{% if not loop.last %}, {% endif %}
-{% endfor %}
-
+  vxlan vlan {{ vlanparams.vlanid }} flood vtep {{ leafinfra|map(attribute='loopbackaddr')|ipaddr('address')|list|join(',') }}
 
 interface vlan{{ vlanparams.vlanid }}
   vrf forwarding {{ tenant }}

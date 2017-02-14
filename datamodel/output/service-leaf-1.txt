@@ -7,11 +7,9 @@ vrf definition CustB
 ip routing vrf CustB
 
 vlan 200
-  name CustB-LAN
-
-interface vxlan0
+  name CustB-LANinterface vxlan0
   vxlan vlan 200 vni 10200
-  vxlan vlan 200 flood vtep 10.254.254.2/32
+  vxlan vlan 200 flood vtep 10.254.254.2
 
 interface vlan200
   vrf forwarding CustB
@@ -33,11 +31,9 @@ vrf definition CustA
 ip routing vrf CustA
 
 vlan 100
-  name CustA-LAN
-
-interface vxlan0
+  name CustA-LANinterface vxlan0
   vxlan vlan 100 vni 10100
-  vxlan vlan 100 flood vtep 10.254.254.2/32
+  vxlan vlan 100 flood vtep 10.254.254.2
 
 interface vlan100
   vrf forwarding CustA
@@ -45,11 +41,9 @@ interface vlan100
   no shut
 
 vlan 101
-  name CustA-DMZ
-
-interface vxlan0
+  name CustA-DMZinterface vxlan0
   vxlan vlan 101 vni 10101
-  vxlan vlan 101 flood vtep 10.254.254.2/32
+  vxlan vlan 101 flood vtep 10.254.254.2
 
 interface vlan101
   vrf forwarding CustA
