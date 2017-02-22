@@ -1,0 +1,17 @@
+interface Loopback0
+  ip address 10.254.254.254/32
+
+ip prefix-list PL-ADV-OUT permit 10.254.254.254/32
+
+route-map RM-ADV-OUT permit 10
+  match ip address prefix-list PL-ADV-OUT
+
+router bgp 64520
+  network 10.254.254.254/32
+  maximum-paths 4
+  neighbor 10.254.0.8/31 remote-as 64522
+  neighbor 10.254.0.8/31 update-source Eth3
+  neighbor 10.254.0.8/31 route-map RM-ADV-OUT out
+  neighbor 10.254.0.0/31 remote-as 64521
+  neighbor 10.254.0.0/31 update-source Eth2
+  neighbor 10.254.0.0/31 route-map RM-ADV-OUT out

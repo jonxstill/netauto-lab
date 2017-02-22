@@ -1,0 +1,24 @@
+{# Grab the router ID (after the -) #}
+{% set routerid = inventory_hostname.split("-")[1]|int %}
+{# Set the loopback address and ASN based on ID #}
+{% set loopbackaddr = dmparams.loopbackprefix|ipsubnet(32, routerid) %}
+{% set asn = dmparams.baseasn + routerid %}
+{% set basenet = (routerid -1) * dmparams.maxspines %}
+loopbackaddr: {{ loopbackaddr }}
+asn: {{ asn }}
+
+{# Generate Interface IPs, peer ASN and peer IPs programatically #}
+interfaces:
+{% for intcount in range(0, dmparams.spines) %}
+  Eth{{ dmparams.firstuplink + intcount }}:
+  {# We have to treat /31 differently as ipaddr doesn't behave consistently under these circumstances #}
+  {% if dmparams.p2plength is equalto 31 %}
+    ip: {{ dmparams.p2pprefix|ipsubnet(dmparams.p2plength, basenet + intcount) }}
+    peerasn: {{ dmparams.baseasn }}
+    peerip: {{ dmparams.p2pprefix|ipsubnet(dmparams.p2plength, basenet + intcount)|ipaddr('-1') }}
+  {% else %}
+    ip: {{ dmparams.p2pprefix|ipsubnet(dmparams.p2plength, basenet + intcount)|ipaddr('1') }}
+    peerasn: {{ dmparams.baseasn }}
+    peerip: {{ dmparams.p2pprefix|ipsubnet(dmparams.p2plength, basenet + intcount)|ipaddr('-2') }}
+  {% endif %}
+{% endfor %}

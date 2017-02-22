@@ -1,0 +1,3 @@
+dmfiles: "{{ inventory_dir }}/roles/service-dm/files"
+dmtemplates: "{{ inventory_dir }}/roles/service-dm/templates"
+infradmfiles: "{{ inventory_dir }}/roles/infra-dm/files"

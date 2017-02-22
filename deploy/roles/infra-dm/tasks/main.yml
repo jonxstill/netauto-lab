@@ -1,0 +1,49 @@
+- name: Read Data Model
+  include_vars:
+    file: "{{ dmfiles }}/infra-dm.yml"
+    name: dmparams
+
+- name: Set Validation Facts
+  set_fact:
+    loopbackprefix_invalid: "{{ dmparams.loopbackprefix|ipsubnet == dmparams.loopbackprefix }}"
+    p2pprefix_invalid: "{{ dmparams.p2pprefix|ipsubnet == dmparams.p2pprefix }}"
+    p2pprefix_insufficient: "{{ (dmparams.p2pprefix|ipaddr('size') / dmparams.p2pprefix|ipsubnet(dmparams.p2plength, 0)|ipaddr('size')) < (dmparams.maxspines * dmparams.leaves) }}"
+
+- name: Data Model Validation
+  run_once: true
+  assert:
+    that:
+      - "dmparams.maxspines|int(-1) != -1"
+      - "dmparams.leaves|int(-1) != -1"
+      - "dmparams.spines|int(-1) != -1"
+      - "dmparams.maxspines > 0"
+      - "dmparams.spines > 0"
+      - "dmparams.spines <= dmparams.maxspines"
+      - "dmparams.leaves > 0"
+      - "dmparams.baseasn is defined"
+      - "dmparams.p2plength <= 31"
+      - "dmparams.leafprefix is defined"
+      - "dmparams.spineprefix is defined"
+      - "dmparams.firstuplink|int(-1) != -1"
+      - "dmparams.firstuplink > 0"
+      - "dmparams.loopbackint|int(-1) != -1"
+      - "dmparams.loopbackint >= 0"
+      - "loopbackprefix_invalid != false"
+      - "p2pprefix_invalid != false"
+      - "p2pprefix_insufficient == false"
+    msg: "Validation Failed"
+
+- name: Generate Device YAML File
+  template:
+    src: "{{ dmtemplates }}/infra-dm.j2"
+    dest: "{{output}}/infra-{{inventory_hostname}}.yml"
+
+- name: Read Infra Data Model
+  include_vars:
+    file: "{{output}}/infra-{{inventory_hostname}}.yml"
+    name: infraparams
+
+- name: Generate Router Config
+  template:
+    src: "infra-config.j2"
+    dest: "{{output}}/infra-{{inventory_hostname}}-config.txt"

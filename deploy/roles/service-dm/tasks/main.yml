@@ -1,0 +1,19 @@
+- name: Read Infra Data Model
+  include_vars:
+    file: "{{ infradmfiles }}/infra-dm.yml"
+    name: dmparams
+
+- name: Read Generated Infra Data Model
+  include_vars:
+    file: "{{ output }}/infra-{{ inventory_hostname }}.yml"
+    name: infraparams
+
+- name: Read Service Data Model
+  include_vars:
+    file: "{{ dmfiles }}/service-dm.yml"
+    name: srvparams
+
+- name: Generate Service Config
+  template:
+    src: "{{ dmtemplates }}/service-dm.j2"
+    dest: "{{output}}/service-{{inventory_hostname}}.txt"

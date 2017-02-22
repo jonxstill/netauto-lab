@@ -1,0 +1,34 @@
+---
+- name: Preparation Tasks
+  hosts: all
+  connection: local
+  gather_facts: false
+
+  tasks:
+    - name: Delete Output Directory
+      run_once: true
+      file:
+        path: "{{ output }}"
+        state: absent
+
+    - name: Create Output Directory
+      run_once: true
+      file:
+        path: "{{ output }}"
+        state: directory
+
+- name: Generate Infrastructure Configuration
+  hosts: all
+  connection: local
+  gather_facts: false
+
+  roles:
+   - infra-dm
+
+- name: Generate Service Configuration
+  hosts: leaves
+  connection: local
+  gather_facts: false
+
+  roles:
+   - service-dm

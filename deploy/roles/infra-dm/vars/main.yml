@@ -1,0 +1,2 @@
+dmfiles: "{{ inventory_dir }}/roles/infra-dm/files"
+dmtemplates: "{{ inventory_dir }}/roles/infra-dm/templates"

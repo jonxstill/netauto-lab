@@ -1,0 +1,70 @@
+interface vxlan0
+  vxlan source-interface Lo0
+
+vrf definition CustB
+  rd 64522:2
+
+ip routing vrf CustB
+
+vlan 200
+  name CustB-LANinterface vxlan0
+  vxlan vlan 200 vni 10200
+  vxlan vlan 200 flood vtep 10.254.254.1
+
+interface vlan200
+  vrf forwarding CustB
+  ip address virtual 172.16.1.254/24
+  no shut
+
+interface Eth7
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan add 200
+  spanning-tree portfast edge
+  spanning-tree bpduguard enable
+  spanning-tree guard root
+  switchport nonegotiate
+
+vrf definition CustA
+  rd 64522:1
+
+ip routing vrf CustA
+
+vlan 100
+  name CustA-LANinterface vxlan0
+  vxlan vlan 100 vni 10100
+  vxlan vlan 100 flood vtep 10.254.254.1
+
+interface vlan100
+  vrf forwarding CustA
+  ip address virtual 192.168.1.254/24
+  no shut
+
+vlan 101
+  name CustA-DMZinterface vxlan0
+  vxlan vlan 101 vni 10101
+  vxlan vlan 101 flood vtep 10.254.254.1
+
+interface vlan101
+  vrf forwarding CustA
+  ip address virtual 172.16.1.254/24
+  no shut
+
+interface Eth5
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan add 101
+  spanning-tree portfast edge
+  spanning-tree bpduguard enable
+  spanning-tree guard root
+  switchport nonegotiate
+
+interface Eth4
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan add 100
+  spanning-tree portfast edge
+  spanning-tree bpduguard enable
+  spanning-tree guard root
+  switchport nonegotiate
+
