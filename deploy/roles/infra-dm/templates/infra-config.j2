@@ -1,11 +1,22 @@
 #jinja2: lstrip_blocks: True
+ip routing
+
 interface Loopback{{ dmparams.loopbackint }}
   ip address {{ infraparams.loopbackaddr }}
 
+{% if infraparams.devtype is equalto 'leaf' %}
 ip prefix-list PL-ADV-OUT permit {{ infraparams.loopbackaddr }}
 
 route-map RM-ADV-OUT permit 10
   match ip address prefix-list PL-ADV-OUT
+{% endif %}
+
+{% for iface, ifparams in infraparams.interfaces.iteritems() %}
+interface {{ iface }}
+   no switchport
+   ip address {{ ifparams.ip }}
+   no shutdown
+{% endfor %}   
 
 router bgp {{ infraparams.asn }}
   network {{ infraparams.loopbackaddr }}
@@ -13,5 +24,7 @@ router bgp {{ infraparams.asn }}
 {% for peerint, peerparams in infraparams.interfaces.iteritems() %}
   neighbor {{ peerparams.peerip }} remote-as {{ peerparams.peerasn }}
   neighbor {{ peerparams.peerip }} update-source {{ peerint }}
+{% if infraparams.devtype is equalto 'leaf' %}
   neighbor {{ peerparams.peerip }} route-map RM-ADV-OUT out
+{% endif %}
 {% endfor %}

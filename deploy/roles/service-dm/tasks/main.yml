@@ -1,19 +1,27 @@
 - name: Read Infra Data Model
+  check_mode: no
+  changed_when: False
   include_vars:
     file: "{{ infradmfiles }}/infra-dm.yml"
     name: dmparams
 
 - name: Read Generated Infra Data Model
+  check_mode: no
+  changed_when: False
   include_vars:
     file: "{{ output }}/infra-{{ inventory_hostname }}.yml"
     name: infraparams
 
-- name: Read Service Data Model
+- name: Read Service data Model
+  check_mode: no
+  changed_when: False
   include_vars:
     file: "{{ dmfiles }}/service-dm.yml"
     name: srvparams
 
 - name: Generate Service Config
+  check_mode: no
+  changed_when: False
   tags: [print_action]
   template:
     src: "{{ dmtemplates }}/service-dm.j2"

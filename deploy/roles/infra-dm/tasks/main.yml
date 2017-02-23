@@ -1,9 +1,13 @@
 - name: Read Data Model
+  check_mode: no
+  changed_when: False
   include_vars:
     file: "{{ dmfiles }}/infra-dm.yml"
     name: dmparams
 
 - name: Set Validation Facts
+  check_mode: no
+  changed_when: False
   set_fact:
     loopbackprefix_invalid: "{{ dmparams.loopbackprefix|ipsubnet == dmparams.loopbackprefix }}"
     p2pprefix_invalid: "{{ dmparams.p2pprefix|ipsubnet == dmparams.p2pprefix }}"
@@ -11,6 +15,8 @@
 
 - name: Data Model Validation
   run_once: true
+  check_mode: no
+  changed_when: False
   tags: [print_action]
   assert:
     that:
@@ -36,16 +42,22 @@
 
 - name: Generate Device YAML File
   tags: [print_action]
+  check_mode: no
+  changed_when: False
   template:
     src: "{{ dmtemplates }}/infra-dm.j2"
     dest: "{{output}}/infra-{{inventory_hostname}}.yml"
 
 - name: Read Infra Data Model
+  check_mode: no
+  changed_when: False
   include_vars:
     file: "{{output}}/infra-{{inventory_hostname}}.yml"
     name: infraparams
 
 - name: Generate Router Config
+  check_mode: no
+  changed_when: False
   tags: [print_action]
   template:
     src: "infra-config.j2"

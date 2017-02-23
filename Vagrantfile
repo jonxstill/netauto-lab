@@ -81,6 +81,11 @@ no switchport
 no shutdown
 vrf forwarding MGMT
 ip address $2 255.255.255.0"
+exit
+management api http-commands
+no shutdown
+vrf MGMT
+no shutdown
 SCRIPT
 
         srv.vm.provision "shell" do |s|

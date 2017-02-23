@@ -1,13 +1,14 @@
 ---
 loopbackaddr: 10.254.254.2/32
 asn: 64522
+devtype: leaf
 
 interfaces:
   Eth2:
     ip: 10.254.0.8/31
     peerasn: 64520
-    peerip: 10.254.0.9/31
+    peerip: 10.254.0.9
   Eth3:
     ip: 10.254.0.10/31
     peerasn: 64520
-    peerip: 10.254.0.11/31
+    peerip: 10.254.0.11

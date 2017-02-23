@@ -4,6 +4,30 @@
     provider: "{{ cli }}"
     dev_os: "eos"
     config_file: "{{ output }}/infra-{{ inventory_hostname }}-config.txt"
-    commit_changes: false
+    commit_changes: true
     diff_file: "{{ output }}/infra-{{ inventory_hostname }}.diff"
     get_diffs: true
+
+- name: Get BGP Status from Device
+  tags: [print_action]
+  napalm_get_facts:
+    provider: "{{ cli }}"
+    dev_os: "eos"
+    filter: ['bgp_neighbors']
+  register: napalm_facts
+
+- name: Verify BGP sessions are up
+  tags: [print_action]
+  assert:
+    that:
+      - item.value.is_up
+    msg: "{{ item.key }} is down"
+  with_dict: "{{ napalm_facts.ansible_facts.bgp_neighbors.global.peers }}"
+
+- name: "Verify BGP sessions are receiving prefixes"
+  tags: [print_action]
+  assert:
+    that:
+      - item.value.address_family.ipv4.received_prefixes > 0
+    msg: "{{ item.key }} is not receiving any prefixes"
+  with_dict: "{{ napalm_facts.ansible_facts.bgp_neighbors.global.peers }}"

@@ -6,6 +6,7 @@
 {% set basenet = (routerid -1) * dmparams.maxspines %}
 loopbackaddr: {{ loopbackaddr }}
 asn: {{ asn }}
+devtype: leaf
 
 {# Generate Interface IPs, peer ASN and peer IPs programatically #}
 interfaces:
@@ -15,10 +16,10 @@ interfaces:
   {% if dmparams.p2plength is equalto 31 %}
     ip: {{ dmparams.p2pprefix|ipsubnet(dmparams.p2plength, basenet + intcount) }}
     peerasn: {{ dmparams.baseasn }}
-    peerip: {{ dmparams.p2pprefix|ipsubnet(dmparams.p2plength, basenet + intcount)|ipaddr('-1') }}
+    peerip: {{ dmparams.p2pprefix|ipsubnet(dmparams.p2plength, basenet + intcount)|ipaddr('-1')|ipaddr('address') }}
   {% else %}
     ip: {{ dmparams.p2pprefix|ipsubnet(dmparams.p2plength, basenet + intcount)|ipaddr('1') }}
     peerasn: {{ dmparams.baseasn }}
-    peerip: {{ dmparams.p2pprefix|ipsubnet(dmparams.p2plength, basenet + intcount)|ipaddr('-2') }}
+    peerip: {{ dmparams.p2pprefix|ipsubnet(dmparams.p2plength, basenet + intcount)|ipaddr('-2')|ipaddr('address') }}
   {% endif %}
 {% endfor %}

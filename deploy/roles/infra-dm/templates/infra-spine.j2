@@ -5,6 +5,7 @@
 {% set asn = dmparams.baseasn %}
 loopbackaddr: {{ loopbackaddr }}
 asn: {{ asn }}
+devtype: spine
 
 {# Generate Interface IPs, peer ASN and peer IPs programatically #}
 interfaces:
@@ -14,10 +15,10 @@ interfaces:
   {% if dmparams.p2plength is equalto 31 %}
     ip: {{ dmparams.p2pprefix|ipsubnet(dmparams.p2plength, ((intcount * dmparams.maxspines) + (routerid - 1)))|ipaddr('-1') }}
     peerasn: {{ dmparams.baseasn + intcount + 1 }}
-    peerip: {{ dmparams.p2pprefix|ipsubnet(dmparams.p2plength, ((intcount * dmparams.maxspines) + (routerid - 1))) }}
+    peerip: {{ dmparams.p2pprefix|ipsubnet(dmparams.p2plength, ((intcount * dmparams.maxspines) + (routerid - 1)))|ipaddr('address') }}
   {% else %}
     ip: {{ dmparams.p2pprefix|ipsubnet(dmparams.p2plength, ((intcount * dmparams.maxspines) + (routerid - 1)))|ipaddr('-2') }}
     peerasn: {{ dmparams.baseasn + intcount + 1 }}
-    peerip: {{ dmparams.p2pprefix|ipsubnet(dmparams.p2plength, ((intcount * dmparams.maxspines) + (routerid - 1)))|ipaddr('1') }}
+    peerip: {{ dmparams.p2pprefix|ipsubnet(dmparams.p2plength, ((intcount * dmparams.maxspines) + (routerid - 1)))|ipaddr('1')|ipaddr('address') }}
   {% endif %} 
 {% endfor %}
