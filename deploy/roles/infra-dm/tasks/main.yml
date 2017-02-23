@@ -11,6 +11,7 @@
 
 - name: Data Model Validation
   run_once: true
+  tags: [print_action]
   assert:
     that:
       - "dmparams.maxspines|int(-1) != -1"
@@ -34,6 +35,7 @@
     msg: "Validation Failed"
 
 - name: Generate Device YAML File
+  tags: [print_action]
   template:
     src: "{{ dmtemplates }}/infra-dm.j2"
     dest: "{{output}}/infra-{{inventory_hostname}}.yml"
@@ -44,6 +46,7 @@
     name: infraparams
 
 - name: Generate Router Config
+  tags: [print_action]
   template:
     src: "infra-config.j2"
     dest: "{{output}}/infra-{{inventory_hostname}}-config.txt"

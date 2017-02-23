@@ -14,6 +14,7 @@
     name: srvparams
 
 - name: Generate Service Config
+  tags: [print_action]
   template:
     src: "{{ dmtemplates }}/service-dm.j2"
     dest: "{{output}}/service-{{inventory_hostname}}.txt"

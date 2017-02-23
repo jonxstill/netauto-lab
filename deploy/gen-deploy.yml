@@ -24,6 +24,7 @@
 
   roles:
    - infra-dm
+   - infra-deploy
 
 - name: Generate Service Configuration
   hosts: leaves

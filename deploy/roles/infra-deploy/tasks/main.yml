@@ -1,0 +1,9 @@
+- name: Deploy Infrastructure Config
+  tags: [print_action]
+  napalm_install_config:
+    provider: "{{ cli }}"
+    dev_os: "eos"
+    config_file: "{{ output }}/infra-{{ inventory_hostname }}-config.txt"
+    commit_changes: false
+    diff_file: "{{ output }}/infra-{{ inventory_hostname }}.diff"
+    get_diffs: true
